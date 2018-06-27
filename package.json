@@ -1,0 +1,36 @@
+{
+  "name": "react-static-example-basic",
+  "version": "1.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "react-static start",
+    "stage": "react-static build --staging",
+    "build": "react-static build",
+    "serve": "serve dist -p 3000"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "babel-preset-react-app": "^3.1.2",
+    "eslint-loader": "^2.0.0",
+    "obj-str": "^1.0.0",
+    "react": "^16.0.0",
+    "react-dev-utils": "^5.0.1",
+    "react-dom": "^16.0.0",
+    "react-router": "^4.2.0",
+    "react-static": "^5.9.7",
+    "webpack": "^3.12.0"
+  },
+  "devDependencies": {
+    "@css-blocks/jsx": "^0.19.0",
+    "@css-blocks/runtime": "^0.18.0",
+    "@css-blocks/webpack": "^0.19.0",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "eslint-config-react-tools": "1.x.x",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "serve": "^6.1.0"
+  }
+}
