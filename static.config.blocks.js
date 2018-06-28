@@ -1,7 +1,5 @@
-// Though this file is optional, there are SO MANY COOL THINGS you can do here.
-// Read the docs at https://github.com/nozzle/react-static/blob/master/README.md to learn more!
-
-
+import axios from 'axios'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import cssAssets from './css';
 
 const paths = require('./paths');
@@ -17,10 +15,28 @@ const CssBlocksPlugin = require("@css-blocks/webpack").CssBlocksPlugin;
 const CssBlockRewriter = new CssBlocks.Rewriter();
 const CssBlockAnalyzer = new CssBlocks.Analyzer("unique-name", jsxCompilationOptions);
 
-
-
 export default {
-
+  getSiteData: () => ({
+    title: 'React Static',
+  }),
+  getRoutes: async () => {
+    const {data: posts} = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    return [{
+      path: '/', component: 'src/containers/Home',
+    }, {
+      path: '/about', component: 'src/containers/About.jsx',
+    }, {
+      path: '/blog', component: 'src/containers/Blog', getData: () => ({
+        posts,
+      }), children: posts.map(post => ({
+        path: `/post/${post.id}`, component: 'src/containers/Post', getData: () => ({
+          post,
+        }),
+      })),
+    }, {
+      is404: true, component: 'src/containers/404',
+    },]
+  },
   webpack: (config, {defaultLoaders, stage}) => {
     config.plugins = [
 
@@ -30,9 +46,7 @@ export default {
         name: "css-blocks",
         compilationOptions: {},
         optimization: {}
-      }),
-      // cssAssets({minify: true, inlineSourceMaps: false})
-    ];
+      }), cssAssets({minify: true, inlineSourceMaps: false}),];
     config.resolve.extensions = ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx', '.ts', '.tsx'];
     config.module.rules = [
 
@@ -41,10 +55,10 @@ export default {
       {
         test: /\.(js|jsx|mjs)$/, enforce: 'pre', use: [{
           options: {
-            formatter: eslintFormatter, eslintPath: require.resolve('eslint')
+            formatter: eslintFormatter, eslintPath: require.resolve('eslint'),
 
-          }, loader: require.resolve('eslint-loader')
-        }], include: paths.appSrc
+          }, loader: require.resolve('eslint-loader'),
+        },], include: paths.appSrc,
       }, {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
@@ -52,7 +66,7 @@ export default {
         oneOf: [{
           test: /\.[j|t]s(x?)$/, exclude: /node_modules/, use: [{
             loader: require.resolve('babel-loader'), options: {
-              presets: [require.resolve("babel-preset-react-app")], cacheDirectory: true, compact: true
+              presets: [require.resolve("babel-preset-react-app")], cacheDirectory: true, compact: true,
             }
           },
 
@@ -61,11 +75,11 @@ export default {
             // other transforms are done.
             {
               loader: require.resolve('babel-loader'), options: {
-                plugins: [require("@css-blocks/jsx/dist/src/transformer/babel").makePlugin({rewriter: CssBlockRewriter})],
+                plugins: [require("@css-blocks/jsx/dist/src/transformer/babel").makePlugin({rewriter: CssBlockRewriter}),],
                 cacheDirectory: true,
                 compact: true,
                 parserOpts: {
-                  plugins: ["jsx", "doExpressions", "objectRestSpread", "decorators", "classProperties"]
+                  plugins: ["jsx", "doExpressions", "objectRestSpread", "decorators", "classProperties",]
                 }
               }
             },
@@ -78,7 +92,7 @@ export default {
               loader: require.resolve("@css-blocks/webpack/dist/src/loader"), options: {
                 analyzer: CssBlockAnalyzer, rewriter: CssBlockRewriter
               }
-            }]
+            },]
         }, // defaultLoaders.cssLoader,
           // defaultLoaders.jsLoader,
           // defaultLoaders.fileLoader,
@@ -94,12 +108,14 @@ export default {
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
             exclude: [/\.[j|t]s(x?)$/, /\.html$/, /\.json$/], loader: require.resolve('file-loader'), options: {
-              name: 'static/media/[name].[hash:8].[ext]'
-            }
-          }]
-      } // ** STOP ** Are you adding a new loader?
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
+          },]
+      }, // ** STOP ** Are you adding a new loader?
       // Make sure to add the new loader(s) before the "file" loader.
 
     ];
-  }
+
+    return config
+  },
 }
