@@ -12,7 +12,27 @@ background-color: red;
     text-align: center;
     background-color: blue;
 }
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 8rem;
+    background-color: wheat;
+}
+.navList {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
+.footer {
+    background-color: red;
+}
+
+.footerLink {
+    color: green;
+}
 .App-logo {
     animation: App-logo-spin infinite 20s linear;
     height: 120px;
