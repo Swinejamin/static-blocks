@@ -1,7 +1,7 @@
 // Though this file is optional, there are SO MANY COOL THINGS you can do here.
 // Read the docs at https://github.com/nozzle/react-static/blob/master/README.md to learn more!
 
-
+import axios from 'axios'
 import cssAssets from './css';
 
 const paths = require('./paths');
@@ -9,7 +9,7 @@ const paths = require('./paths');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const jsxCompilationOptions = {
   compilationOptions: {}, aliases: {}, optimization: {
-    rewriteIdents: true, mergeDeclarations: true, removeUnusedStyles: true, conflictResolution: true, enabled: true,
+    rewriteIdents: true, mergeDeclarations: true, removeUnusedStyles: true, conflictResolution: true, enabled: true
   }
 };
 const CssBlocks = require("@css-blocks/jsx");
@@ -18,21 +18,41 @@ const CssBlockRewriter = new CssBlocks.Rewriter();
 const CssBlockAnalyzer = new CssBlocks.Analyzer("unique-name", jsxCompilationOptions);
 
 
-
 export default {
-
-  webpack: (config, {defaultLoaders, stage}) => {
-    config.plugins = [
-
-      new CssBlocksPlugin({
+  getRoutes: async () => {
+    const { data: posts } = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    return [{
+      path: '/', component: 'src/containers/Home'
+    }, {
+      path: '/about', component: 'src/containers/About'
+    }, {
+      path: '/blog',
+      component: 'src/containers/Blog',
+      getData: () => (
+        {
+          posts
+        }),
+      children: posts.map(post => (
+        {
+          path: `/post/${post.id}`,
+          component: 'src/containers/Post',
+          getData: () => (
+            {
+              post
+            })
+        }))
+    }, {
+      is404: true, component: 'src/containers/404'
+    }]
+  }, webpack: (config, { defaultLoaders, stage }) => {
+    config.plugins.push(new CssBlocksPlugin({
         analyzer: CssBlockAnalyzer,
         outputCssFile: "blocks.css",
         name: "css-blocks",
         compilationOptions: {},
         optimization: {}
-      }),
-      // cssAssets({minify: true, inlineSourceMaps: false})
-    ];
+      }) // cssAssets({minify: true, inlineSourceMaps: false})
+    );
     config.resolve.extensions = ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx', '.ts', '.tsx'];
     config.module.rules = [
 
@@ -45,7 +65,8 @@ export default {
 
           }, loader: require.resolve('eslint-loader')
         }], include: paths.appSrc
-      }, {
+      },
+      {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
         // back to the "file" loader at the end of the loader list.
@@ -61,7 +82,7 @@ export default {
             // other transforms are done.
             {
               loader: require.resolve('babel-loader'), options: {
-                plugins: [require("@css-blocks/jsx/dist/src/transformer/babel").makePlugin({rewriter: CssBlockRewriter})],
+                plugins: [require("@css-blocks/jsx/dist/src/transformer/babel").makePlugin({ rewriter: CssBlockRewriter })],
                 cacheDirectory: true,
                 compact: true,
                 parserOpts: {
