@@ -1,12 +1,13 @@
-import React from 'react'
-
+import React from "react";
 
 const About = props => {
-  console.log(props)
-  return (
-    <div >
-      <p >This is bullshit</p >
-    </div >)
-}
+  console.info(props);
 
-export default About
+  return (
+    <div>
+      <p>This is bullshit</p>
+    </div>
+  );
+};
+
+export default About;

@@ -1,12 +1,12 @@
-import React from 'react'
-
+import React from "react";
 
 const Home = props => {
-  console.log(props)
+  console.info(props);
   return (
-    <div >
-      <p >This is bullshit</p >
-    </div >)
-}
+    <div>
+      <p>This is bullshit</p>
+    </div>
+  );
+};
 
-export default Home
+export default Home;

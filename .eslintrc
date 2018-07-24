@@ -1,0 +1,10 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }]
+  },
+  "plugins": ["react"],
+
+  "extends": ["plugin:prettier/recommended", "plugin:react/recommended"]
+}
