@@ -37,12 +37,12 @@ module.exports = function(options) {
   let browsers = options.browsers || ["> 1%", "last 2 versions"];
   var assetOptions = {
     cssFiles: {
-      "prism.css": "public/lib/prismjs/prism.css",
-      "baseline.css": "public/lib/baseline.css"
+      // "prism.css": "public/lib/prismjs/prism.css",
+      // "baseline.css": "public/lib/baseline.css"
     },
     concat: {
       "css-blocks.css": {
-        sources: ["prism.css", "baseline.css", "blocks.css"],
+        sources: ["blocks.css"],
         postProcess: {
           postcss: [autoprefixer({ browsers })],
           processor: options.minify ? minifierAdapter : noopProcessor
