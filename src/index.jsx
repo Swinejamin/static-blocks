@@ -17,9 +17,7 @@ if (typeof document !== "undefined") {
   const render = Comp => {
     renderMethod(
       <ErrorBoundary>
-        <BrowserRouter>
-          <Comp />
-        </BrowserRouter>
+        <Comp />
       </ErrorBoundary>,
       document.getElementById("root")
     );

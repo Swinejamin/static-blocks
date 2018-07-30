@@ -40,7 +40,7 @@ export default {
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href={cssFilename} />
+        <link rel="stylesheet" href="css-blocks.css" />
       </Head>
       <Body>{children}</Body>
     </Html>
@@ -51,7 +51,7 @@ export default {
     );
     return [
       {
-        path: "/Home",
+        path: "/",
         component: "src/containers/Home"
       },
       {
@@ -83,17 +83,16 @@ export default {
     config.plugins.push(
       new CssBlocksPlugin({
         analyzer: analyzer,
-        outputCssFile: "blocks.css",
+        outputCssFile: "css-blocks.css",
         name: "css-blocks",
         compilationOptions: {},
         optimization: {}
       }),
-      cssAssets({ minify: true, inlineSourceMaps: false }),
+      // cssAssets({ minify: true, inlineSourceMaps: false }),
 
       new ExtractCssChunks({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: "[name].css"
       })
     );
     config.resolve.extensions = [

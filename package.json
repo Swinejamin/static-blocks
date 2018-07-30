@@ -20,7 +20,8 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
-    "react-static": "^5.9.7"
+    "react-static": "^5.9.7",
+    "webpack": "^3.12.0"
   },
   "devDependencies": {
     "@css-blocks/jsx": "^0.19.0",
